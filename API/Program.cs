@@ -1,20 +1,27 @@
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+// Add controllers service (required for MapControllers)
+builder.Services.AddControllers();
+
+// Add CORS policy for development
+
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
+// Use CORS policy
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod()
+    .AllowCredentials()
+    .WithOrigins("http://localhost:3000", "https://localhost:3000"));
 
 app.MapControllers();
 
