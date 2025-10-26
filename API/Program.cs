@@ -1,5 +1,9 @@
+using Application.Core;
+using Application.Todos.Queries;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +15,13 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 
 // Add controllers service (required for MapControllers)
 builder.Services.AddControllers();
+builder.Services.AddMediatR(cfg =>
+cfg.RegisterServicesFromAssemblyContaining<GetTodoList.Handler>());
+builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+
+
+
+
 
 // Add CORS policy for development
 
